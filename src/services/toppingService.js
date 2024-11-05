@@ -25,9 +25,9 @@ export const createPizzaTopping = async (pizzaToppingObject) => {
     }
 }
 
-export const deletePizzaById = async (pizzaId) => {
+export const deletePizzaToppingById = async (pizzaToppingId) => {
     try {
-        const response = await fetch(`http://localhost:8088/pizzaToppings/${pizzaId}`, {
+        const response = await fetch(`http://localhost:8088/pizzaToppings/${pizzaToppingId}`, {
             method: "DELETE"
         });
     } catch (error) {
