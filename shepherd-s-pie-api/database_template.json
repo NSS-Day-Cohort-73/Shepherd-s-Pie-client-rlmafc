@@ -1,0 +1,148 @@
+{
+  "sizes": [
+    {
+      "id": 1,
+      "name": "small (10\")",
+      "price": 10
+    },
+    {
+      "id": 2,
+      "name": "medium (14\")",
+      "price": 12
+    },
+    {
+      "id": 3,
+      "name": "large (18\")",
+      "price": 15
+    }
+  ],
+  "cheeses": [
+    {
+      "id": 1,
+      "name": "Buffalo Mozzarella"
+    },
+    {
+      "id": 2,
+      "name": "Four Cheese"
+    },
+    {
+      "id": 3,
+      "name": "Vegan"
+    },
+    {
+      "id": 4,
+      "name": "None (cheeseless)"
+    }
+  ],
+  "sauces": [
+    {
+      "id": 1,
+      "name": "Marinara"
+    },
+    {
+      "id": 2,
+      "name": "Arrabbiata"
+    },
+    {
+      "id": 3,
+      "name": "Garlic White"
+    },
+    {
+      "id": 4,
+      "name": "None (sauceless)"
+    }
+  ],
+  "toppings": [
+    {
+      "id": 1,
+      "name": "sausage",
+      "price": 0.5
+    },
+    {
+      "id": 2,
+      "name": "pepperoni",
+      "price": 0.5
+    },
+    {
+      "id": 3,
+      "name": "mushroom",
+      "price": 0.5
+    },
+    {
+      "id": 4,
+      "name": "onion",
+      "price": 0.5
+    },
+    {
+      "id": 5,
+      "name": "green pepper",
+      "price": 0.5
+    },
+    {
+      "id": 6,
+      "name": "black olive",
+      "price": 0.5
+    },
+    {
+      "id": 7,
+      "name": "basil",
+      "price": 0.5
+    },
+    {
+      "id": 8,
+      "name": "extra cheese",
+      "price": 0.5
+    }
+  ],
+  "employees": [
+    {
+      "id": 1,
+      "fullName": "Greg",
+      "email": "greg@greg.com",
+      "address": "123 Main St",
+      "phone": 1234567890,
+      "isAdmin": true
+    },
+    {
+      "id": 2,
+      "fullName": "Not Greg",
+      "email": "notgreg@greg.com",
+      "address": "456 Elm St",
+      "phone": 9876543210,
+      "isAdmin": false
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "tableNumber": 12,
+      "date": "2024-11-05T14:00:00Z",
+      "tipAmount": 3,
+      "complete": true
+    }
+  ],
+  "pizzas": [
+    {
+      "id": 1,
+      "sizeId": 2,
+      "cheeseId": 1,
+      "sauceId": 1,
+      "orderId": 1
+    }
+  ],
+  "pizzaToppings": [
+    {
+      "id": 1,
+      "pizzaId": 1,
+      "toppingId": 2
+    }
+  ],
+  "employeeOrders": [
+    {
+      "id": 1,
+      "employeeId": 1,
+      "orderId": 1,
+      "tookOrder": true
+    }
+  ]
+}
