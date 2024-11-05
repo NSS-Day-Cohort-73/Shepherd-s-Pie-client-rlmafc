@@ -26,10 +26,10 @@ export const addEmployee = async (newEmployee) => {
 };
 
 // PUT request to update an existing employee
-export const updateEmployee = async (employeeId, updatedEmployee) => {
+export const updateEmployee = async (updatedEmployee) => {
   try {
     const response = await fetch(
-      `http://localhost:8088/employees/${employeeId}`,
+      `http://localhost:8088/employees/${updatedEmployee.id}`,
       {
         method: "PUT",
         headers: {
