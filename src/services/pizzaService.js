@@ -54,7 +54,7 @@ export const updatePizza = async (updatedPizza) => {
             await fetch(`http://localhost:8088/pizzas/${pizzaId}`, {
                 method: "DELETE",
             });
-            console.log(`Pizza ${pizzaId} deleted.`);
+            console.log(`Pizza deleted.`);
         } catch (error) {
             console.error("Error deleting pizza:", error);
         }
