@@ -3,7 +3,7 @@ export const getPizzas = async () => {
         const response = await fetch("http://localhost:8088/pizzas");
         return response.json();
     } catch (error) {
-        console.error("Error fetching pizzass:", error);
+        console.error("Error fetching pizzas:", error);
     }
 };
 
