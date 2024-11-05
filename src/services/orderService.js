@@ -22,9 +22,9 @@ export const createOrder = async (newOrder) => {
   }
 }
 // updating order
-export const updateOrder = async (orderId, updatedOrder) => {
+export const updateOrder = async (updatedOrder) => {
   try {
-    const response = await fetch(`http://localhost:8088/orders/${orderId}`, {
+    const response = await fetch(`http://localhost:8088/orders/${updatedOrder.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedOrder),
