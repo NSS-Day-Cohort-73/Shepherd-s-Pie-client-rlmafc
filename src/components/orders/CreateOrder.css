@@ -1,0 +1,58 @@
+.create-order__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.create-order__form--order {
+  display: flex;
+  flex-direction: row;
+}
+
+.create-order__fieldset {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pizza__container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+}
+
+.pizza__fieldset--checkbox {
+  width: 30%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.pizza-topping {
+  width: 50%;
+}
+.create-order__btn-container {
+  display: flex;
+  justify-content: space-around;
+}
+.btn-primary {
+  margin: 1em;
+  background-color: var(--dark);
+  padding: 0.5em;
+  color: var(--lightest);
+  border-radius: 8px;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent);
+  cursor: pointer;
+  color: var(--dark);
+}
+
+.create-order__form--pizzas{
+  background-color: var(--light);
+  padding: 1em;
+  width: 90%;
+  border-radius: 8px;
+}
