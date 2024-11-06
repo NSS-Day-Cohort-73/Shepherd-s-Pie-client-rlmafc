@@ -27,7 +27,19 @@
 }
 
 .login-btn {
-  align-self: flex-end;
+  align-self: center;
+  background-color: var(--darkest);
+  border: 0;
+  font-size: 1.25em;
+  padding: 7px 15px;
+  border-radius: 5px;
+  color: var(--lightest);
+}
+
+.login-btn:hover {
+  cursor: pointer;
+  background-color: var(--accent);
+  color: var(--darkest);
 }
 
 .login-btn:focus {
