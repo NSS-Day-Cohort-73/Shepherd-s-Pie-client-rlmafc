@@ -45,3 +45,12 @@ export const deleteOrder = async (orderId) => {
     console.error("Error deleting order", error)
   }
 }
+
+export const getAllEmployeeOrders = async () => {
+    try {
+        const response = await fetch(`http://localhost:8088/employeeOrders?_expand=order&_expand=employee`)
+        return response.json()
+    } catch (error) {
+        console.error("Error fetching employeeOrders.", error)
+    }
+}
