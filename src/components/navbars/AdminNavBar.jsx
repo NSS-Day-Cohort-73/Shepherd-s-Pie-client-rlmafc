@@ -1,9 +1,32 @@
 import "./NavBar.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { createEmployeeOrder, createOrder } from "../../services/orderService";
 
-export const AdminNavBar = () => {
+
+export const AdminNavBar = ({currentUser}) => {
   const navigate = useNavigate();
+
+  const handleCreateOrder = async () => {
+    const orderObject = {
+      tableNumber: 0,
+      date: new Date(),
+      tipAmount: 0,
+      complete: false,
+    };
+
+    
+    const order = await createOrder(orderObject);
+
+    const employeeOrderObject = {
+      employeeId: currentUser.id,
+      orderId: order.id,
+      tookOrder: true,
+    };
+    await createEmployeeOrder(employeeOrderObject)
+
+    navigate(`/orders/create/${order.id}`);
+  };
   return (
     <ul className="navbar">
       <li className="navbar-item dropdown">
@@ -15,9 +38,9 @@ export const AdminNavBar = () => {
             </Link>
           </li>
           <li>
-            <Link className="navbar-link" to="/orders/create">
+            <button className="navbar-link" onClick={handleCreateOrder}>
               Create Order
-            </Link>
+            </button>
           </li>
         </ul>
       </li>
@@ -31,7 +54,7 @@ export const AdminNavBar = () => {
             </Link>
           </li>
           <li>
-            <Link className="navbar-link" to="/employees/create">
+            <Link className="navbar-link" to={`/employees/create/`}>
               Create Employee
             </Link>
           </li>

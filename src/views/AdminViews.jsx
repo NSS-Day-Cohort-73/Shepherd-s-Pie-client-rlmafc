@@ -17,7 +17,7 @@ export const AdminViews = ({ currentUser }) => {
         path="/"
         element={
           <>
-            <AdminNavBar />
+            <AdminNavBar currentUser={currentUser} />
             <Outlet />
             {/* Outlet will render the index route or other nested routes */}
           </>
@@ -35,7 +35,7 @@ export const AdminViews = ({ currentUser }) => {
           />
         </Route>
         <Route
-          path="orders/create"
+          path="orders/create/:orderId"
           element={<CreateOrder currentUser={currentUser} />}
         />
         <Route path="orders/edit/:orderId" element={<CreateOrder />} />
@@ -56,10 +56,7 @@ export const AdminViews = ({ currentUser }) => {
           path="employee/edit/:employeeId"
           element={<CreateEmployee currentUser={currentUser} />}
         />
-        <Route
-          path="reports"
-          element={<Reports currentUser={currentUser} />}
-        />
+        <Route path="reports" element={<Reports currentUser={currentUser} />} />
       </Route>
     </Routes>
   );
