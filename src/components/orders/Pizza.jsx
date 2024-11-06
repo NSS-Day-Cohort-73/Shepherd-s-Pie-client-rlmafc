@@ -56,7 +56,7 @@ export const Pizza = () => {
             <Topping key={topping.id} topping={topping} />
           ))}
         </fieldset>
-        <button>X</button>
+        <button className="btn-delete">X</button>
       </div>
     </div>
   );

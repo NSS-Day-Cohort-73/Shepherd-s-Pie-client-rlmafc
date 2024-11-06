@@ -56,3 +56,13 @@
   width: 90%;
   border-radius: 8px;
 }
+
+.btn-delete{
+  width: 1.5em;
+  height:1.5em;
+  background-color: var(--darkest);
+  color: var(--lightest);
+  text-align: center;
+  font-weight: bold;
+  border-radius: 25%;
+}
