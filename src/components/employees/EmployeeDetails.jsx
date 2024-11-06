@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
-import { Navigate, useParams } from "react-router-dom"
-import { AdminNavBar } from "../navbars/AdminNavBar"
+import { useNavigate, useParams } from "react-router-dom"
 
 export const EmployeeDetails = () => {
   // get employeeId from the url
@@ -42,13 +41,13 @@ export const EmployeeDetails = () => {
   //       throw new Error("Failed to delete employee")
   //     }
 
-  //     Navigate("/employees/view") //insert route
+  //     useNavigate("/employees/view") //insert route
   //   } catch (error) {
   //     setError(error.message)
   //   }
 
   // const handleEditEmployee = () => {
-  //   Navigate(`/employees/edit/employeeId`)
+  //   useNavigate(`/employees/edit/employeeId`)
   // }
 
   if (error) {
@@ -59,7 +58,6 @@ export const EmployeeDetails = () => {
   }
   return (
     <div>
-      <AdminNavBar />
       <div className="employee-details-container">
         <h1>Employee Details</h1>
         <h2>{employee.fullName}</h2>
