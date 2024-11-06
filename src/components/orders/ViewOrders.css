@@ -31,6 +31,10 @@
 
 .order {
     display:flex;
+    border: 3px var(--accent) solid;
+    border-radius: 15px;
+    padding: 10px;
+    margin: 5px;
 }
 
 .order-details {
@@ -53,15 +57,22 @@
     flex-basis:70%;
 }
 
+.order-table {
+    display:flex;
+    justify-content: center;
+}
+
 .order-employee-taken, .order-employee-delivery {
     display:flex;
 }
 
-.order-employee-taken-label, .order-employee-taken-data,
-.order-employee-delivery-label, .order-employee-delivery-data {
-    flex-basis:50%;
+.order-employee-taken-label, .order-employee-delivery-label {
+    flex-basis:60%;
 }
 
+.order-employee-taken-data, .order-employee-delivery-data {
+    flex-basis:40%;
+}
 
 .order-btn-container {
     display:flex;
