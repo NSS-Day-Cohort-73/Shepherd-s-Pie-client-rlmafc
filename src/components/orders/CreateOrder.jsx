@@ -1,15 +1,22 @@
 import { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import "./CreateOrder.css";
 import { getEmployees } from "../../services/employeeService";
 import { Pizza } from "./Pizza";
-import { getAllOrders, updateOrder } from "../../services/orderService";
+import {
+  createEmployeeOrder,
+  deleteEmployeeOrder,
+  getAllOrders,
+  updateEmployeeOrder,
+  updateOrder,
+} from "../../services/orderService";
 import debounce from "lodash.debounce";
 import { addPizza, getPizzas } from "../../services/pizzaService";
 
 export const CreateOrder = ({ currentUser }) => {
   const location = useLocation();
   const isCreate = location.pathname.includes("create");
+  const navigate = useNavigate();
 
   let { orderId } = useParams();
   orderId = parseInt(orderId, 10);
@@ -26,6 +33,15 @@ export const CreateOrder = ({ currentUser }) => {
   const [deliveryDriver, setDeliveryDriver] = useState(null);
   const [loaded, setLoaded] = useState(false); //loaded flag
   const [pizzas, setPizzas] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [tip, setTip] = useState(0);
+  const [sizePrice, setSizePrice] = useState(0);
+  const [toppingPrice, setToppingPrice] = useState(0);
+
+  //TODO: make this function work
+  const updateTotal = () => {
+    setTotal(tip + sizePrice + toppingPrice);
+  };
 
   const saveOrder = debounce(async (order) => {
     if (loaded) {
@@ -37,6 +53,15 @@ export const CreateOrder = ({ currentUser }) => {
       }
     }
   }, 1000);
+
+  const handleSubmit = async () => {
+    try {
+      await updateOrder({ ...order, complete: true }); // Update complete status
+      navigate(`/orders/view/${orderId}`); // Navigate to order view
+    } catch (error) {
+      console.error("Failed to complete order", error);
+    }
+  };
 
   const getAndSetPizzas = async () => {
     const pizzaData = await getPizzas();
@@ -69,21 +94,37 @@ export const CreateOrder = ({ currentUser }) => {
   useEffect(() => {
     saveOrder(order);
   }, [order, loaded, pizzas]);
-
-  const handleDelivery = (event) => {
+  const handleDelivery = async (event) => {
     const isDelivery = event.target.value === "true";
     setDelivery(isDelivery);
     setDeliveryDriver(null);
 
-    if (isDelivery) handleTableNumberChange(0);
+    if (isDelivery) {
+      handleTableNumberChange(0);
+
+      // Create a local variable for the delivery driver
+      const newDriver = {
+        employeeId: 0,
+        orderId: orderId,
+        tookOrder: false,
+      };
+
+      // Create the employee order and set deliveryDriver to the response
+      const response = await createEmployeeOrder(newDriver);
+      console.log(response);
+      setDeliveryDriver(response); // Only set delivery driver after getting response
+    } else {
+      handleTableNumberChange(1);
+      await deleteEmployeeOrder(deliveryDriver.id);
+    }
   };
 
-  const handleEmployeeChange = (event) => {
-    setDeliveryDriver({
-      employeeId: event.target.value,
-      orderId: order.id,
-      tookOrder: false,
-    });
+  const handleEmployeeChange = async (event) => {
+    setDeliveryDriver((prev) => ({
+      ...prev,
+      employeeId: parseInt(event.target.value),
+    }));
+    await updateEmployeeOrder(deliveryDriver);
   };
 
   const handleTableNumberChange = (valueOrEvent) => {
@@ -93,16 +134,16 @@ export const CreateOrder = ({ currentUser }) => {
         : valueOrEvent;
     setOrder((prevOrder) => ({
       ...prevOrder,
-      tableNumber: newValue,
+      tableNumber: parseInt(newValue),
     }));
   };
 
   const handleTipAmountChange = (event) => {
     let newTipAmount = parseFloat(event.target.value) || 0;
-    newTipAmount = newTipAmount.toFixed(2);
+    newTipAmount = newTipAmount;
     setOrder((prevOrder) => ({
       ...prevOrder,
-      tipAmount: newTipAmount,
+      tipAmount: parseFloat(newTipAmount.toFixed(2)),
     }));
   };
 
@@ -162,7 +203,7 @@ export const CreateOrder = ({ currentUser }) => {
           {delivery ? (
             currentUser.isAdmin ? (
               <select onChange={handleEmployeeChange} id="employeeId">
-                <option value="">-- Please choose an option --</option>
+                <option value={0}>-- Please choose an option --</option>
                 {employees.map((item) => (
                   <option key={item.id} value={item.id}>
                     {item.fullName}
@@ -215,7 +256,9 @@ export const CreateOrder = ({ currentUser }) => {
         <button className="btn-primary" onClick={handleAddPizza}>
           Add Pizza
         </button>
-        <button className="btn-primary">Place Order</button>
+        <button className="btn-primary" onClick={handleSubmit}>
+          {isCreate ? "Place Order" : "Submit Changes"}
+        </button>
       </div>
     </div>
   );
