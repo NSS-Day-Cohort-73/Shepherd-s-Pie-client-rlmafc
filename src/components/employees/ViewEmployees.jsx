@@ -28,7 +28,7 @@ export const ViewEmployees = ({ currentUser }) => {
   }
   return (
     <div>
-      <h1>The Shepard's Pie Family</h1>
+      <h1>The Shepherd's Pie Family</h1>
       <ul>
         {employees.map((employee) => (
           <li key={employee.id}>

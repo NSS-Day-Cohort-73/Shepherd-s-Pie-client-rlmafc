@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
+import { deleteEmployee, getEmployees } from "../../services/employeeService"
 
 export const EmployeeDetails = () => {
   // get employeeId from the url
   const { employeeId } = useParams()
+  const navigate = useNavigate()
   // state to hold fetch
   const [employee, setEmployee] = useState(null)
   // error if fetch fails
@@ -12,43 +14,28 @@ export const EmployeeDetails = () => {
   useEffect(() => {
     const getEmployeeDetails = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8088/employees/${employeeId}`
-        )
-        if (!response.ok) {
-          throw new Error("Failed to get employee details")
-        }
-        const details = await response.json()
-        setEmployee(details)
+        const employeeData = await getEmployees(employeeId)
+        setEmployee(employeeData)
       } catch (error) {
         setError(error.message)
       }
     }
-
     getEmployeeDetails()
-  }, [employeeId]) //dependency array to trigger when employeeId changes
+  }, [employeeId])
 
   // handle delete employee
-  // const handleDeleteEmployee = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `http://localhost:8088/employees/${employeeId}`,
-  //       {
-  //         method: "DELETE",
-  //       }
-  //     )
-  //     if (!response.ok) {
-  //       throw new Error("Failed to delete employee")
-  //     }
-
-  //     useNavigate("/employees/view") //insert route
-  //   } catch (error) {
-  //     setError(error.message)
-  //   }
-
-  // const handleEditEmployee = () => {
-  //   useNavigate(`/employees/edit/employeeId`)
-  // }
+  const handleDeleteEmployee = async () => {
+    try {
+      await deleteEmployee(employeeId)
+      navigate("/employees/view")
+    } catch (error) {
+      setError("Failed to delete employee.")
+    }
+  }
+  // handle edit employee
+  const handleEditEmployee = () => {
+    navigate(`/employees/edit/${employee.id}`)
+  }
 
   if (error) {
     return <p>{error}</p>
@@ -65,21 +52,12 @@ export const EmployeeDetails = () => {
         <p>Address: {employee.address}</p>
         <p>Phone: {employee.phone}</p>
       </div>
-      <div className="employee-details-delete-btn">
-        <button
-        // onClick={handleDeleteEmployee}
-        >
-          Delete
-        </button>
-      </div>
       <div className="employee-details-edit-btn">
-        <button
-        // onClick={handleEditEmployee}
-        >
-          Edit
-        </button>
+        <button onClick={handleEditEmployee}>Edit</button>
+      </div>
+      <div className="employee-details-delete-btn">
+        <button onClick={handleDeleteEmployee}>Delete</button>
       </div>
     </div>
   )
 }
-// }
