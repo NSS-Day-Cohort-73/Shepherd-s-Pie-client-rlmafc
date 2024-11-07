@@ -59,3 +59,13 @@ export const updatePizza = async (updatedPizza) => {
             console.error("Error deleting pizza:", error);
         }
   };
+
+
+export const getPizzasByOrderId = async (orderId) => {
+    try {
+        const response = await fetch(`http://localhost:8088/pizzas?orderId=${orderId}&_expand=size&_expand=cheese&_expand=sauce&_embed=pizzaToppings`)
+        return response.json()
+    } catch (error) {
+        console.error("Error fetching.", error)
+    }
+}
