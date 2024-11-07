@@ -2,12 +2,31 @@ import { useEffect, useState } from "react";
 import "./Reports.css"
 import { getAllEmployeeOrders, getAllOrders } from "../../services/orderService";
 import { Order } from "../orders/Order";
+import { getPizzas } from "../../services/pizzaService";
+import { getSizes } from "../../services/extraService";
 
 export const Reports = () => {
     const [startDate, setStartDate] = useState(new Date().toISOString().slice(0,10))
     const [endDate, setEndDate] = useState(new Date().toISOString().slice(0,10))
     const [orders, setOrders] = useState([])
     const [employeeOrders, setEmployeeOrders] = useState([])
+    const [pizzas, setPizzas] = useState([])
+    const [filteredPizzas, setFilteredPizzas] = useState([])
+    const [sizes, setSizes] = useState([])
+
+    const handleSizes = () => {
+        let numberOfFavorites = 0
+        let favoriteSize = 0
+        for (let i = 0; i < sizes.length; i++) {
+            const filteredArray = filteredPizzas.filter(pizza => 
+                pizza.sizeId === i
+            )
+            if (filteredArray.length > numberOfFavorites) {
+                numberOfFavorites = filteredArray.length
+                favoriteSize = filteredArray[0].sizeId
+            }
+        }
+    }
 
     const getAndSetOrders = () => {
         getAllOrders().then((ordersArray) => {
@@ -19,6 +38,20 @@ export const Reports = () => {
         getAllEmployeeOrders().then((data) => {
             setEmployeeOrders(data)
         })
+        getPizzas().then((pizzaArray) => {
+            setPizzas(pizzaArray)
+        }) 
+        getSizes().then((sizeArray) => {
+            setSizes(sizeArray)
+        })
+        const filteredPizzaArray = pizzas.filter(pizza =>
+            orders.some(order =>
+                pizza.orderId === order.id
+            )
+        )
+        setFilteredPizzas(filteredPizzaArray)
+        handleSizes()
+
     }
 
     useEffect(() => {
