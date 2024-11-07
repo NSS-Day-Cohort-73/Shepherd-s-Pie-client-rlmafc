@@ -24,7 +24,7 @@ export const CreateOrder = ({ currentUser }) => {
   const [employees, setEmployees] = useState([]);
   const [delivery, setDelivery] = useState(false);
   const [deliveryDriver, setDeliveryDriver] = useState(null);
-  const [loaded, setLoaded] = useState(false); // New loaded flag
+  const [loaded, setLoaded] = useState(false); //loaded flag
   const [pizzas, setPizzas] = useState([]);
 
   const saveOrder = debounce(async (order) => {
@@ -50,7 +50,10 @@ export const CreateOrder = ({ currentUser }) => {
       setEmployees(employeesData);
 
       const pizzaData = await getPizzas();
-      setPizzas(pizzaData);
+      const filteredPizzaData = pizzaData.filter(
+        (item) => item.orderId === orderId
+      );
+      setPizzas(filteredPizzaData);
 
       setLoaded(true); // Data is loaded
     };
@@ -60,11 +63,8 @@ export const CreateOrder = ({ currentUser }) => {
 
   // // Save order after initial data load and only when order changes
   useEffect(() => {
-    //   if (!loaded || !order.id) return; // Only save if data is loaded and order.id exists
-
     saveOrder(order);
-    //   return () => saveOrder.cancel();
-  }, [order, loaded]);
+  }, [order, loaded, pizzas]);
 
   const handleDelivery = (event) => {
     const isDelivery = event.target.value === "true";
@@ -188,8 +188,8 @@ export const CreateOrder = ({ currentUser }) => {
         </div>
       </div>
       <div className="create-order__form--pizzas">
-        {pizzas.map((pizza) => (
-          <Pizza pizza={pizza} />
+        {pizzas.map((pizzaObj) => (
+          <Pizza pizzaObj={pizzaObj} key={pizzaObj.id} />
         ))}
       </div>
       <div className="create-order__btn-container">
