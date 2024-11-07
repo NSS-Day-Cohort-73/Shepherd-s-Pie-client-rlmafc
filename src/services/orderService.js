@@ -77,3 +77,12 @@ export const createEmployeeOrder = async (newEmployeeOrder) => {
     console.error("Error creating order", error);
   }
 };
+
+export const getEmployeeOrdersByOrderId = async (orderId) => {
+    try {
+        const response = await fetch(`http://localhost:8088/employeeOrders?orderId=${orderId}`)
+        return response.json()
+    } catch (error) {
+        console.error("Error fetching employeeOrders.", error)
+    }
+}
