@@ -5,6 +5,7 @@ import { getEmployees } from "../../services/employeeService";
 import { Pizza } from "./Pizza";
 import { getAllOrders, updateOrder } from "../../services/orderService";
 import debounce from "lodash.debounce";
+import { getPizzas } from "../../services/pizzaService";
 
 export const CreateOrder = ({ currentUser }) => {
   const location = useLocation();
@@ -14,16 +15,17 @@ export const CreateOrder = ({ currentUser }) => {
   orderId = parseInt(orderId, 10);
 
   const [order, setOrder] = useState({
-    // id: null,
-    // tableNumber: 1,
-    // date: "",
-    // tipAmount: 0,
-    // complete: false,
+    tableNumber: 0,
+    date: "",
+    tipAmount: 0.0,
+    complete: false,
+    id: 0,
   });
   const [employees, setEmployees] = useState([]);
   const [delivery, setDelivery] = useState(false);
   const [deliveryDriver, setDeliveryDriver] = useState(null);
   const [loaded, setLoaded] = useState(false); // New loaded flag
+  const [pizzas, setPizzas] = useState([]);
 
   const saveOrder = debounce(async (order) => {
     if (loaded) {
@@ -47,6 +49,9 @@ export const CreateOrder = ({ currentUser }) => {
       const employeesData = await getEmployees();
       setEmployees(employeesData);
 
+      const pizzaData = await getPizzas();
+      setPizzas(pizzaData);
+
       setLoaded(true); // Data is loaded
     };
 
@@ -62,8 +67,11 @@ export const CreateOrder = ({ currentUser }) => {
   }, [order, loaded]);
 
   const handleDelivery = (event) => {
-    setDelivery(event.target.value === "true");
+    const isDelivery = event.target.value === "true";
+    setDelivery(isDelivery);
     setDeliveryDriver(null);
+
+    if (isDelivery) handleTableNumberChange(0);
   };
 
   const handleEmployeeChange = (event) => {
@@ -74,11 +82,23 @@ export const CreateOrder = ({ currentUser }) => {
     });
   };
 
-  const handleTableNumberChange = (event) => {
-    const newTableNumber = parseInt(event.target.value) || 1;
+  const handleTableNumberChange = (valueOrEvent) => {
+    const newValue =
+      typeof valueOrEvent === "object"
+        ? valueOrEvent.target.value
+        : valueOrEvent;
     setOrder((prevOrder) => ({
       ...prevOrder,
-      tableNumber: newTableNumber,
+      tableNumber: newValue,
+    }));
+  };
+
+  const handleTipAmountChange = (event) => {
+    let newTipAmount = parseFloat(event.target.value) || 0;
+    newTipAmount = newTipAmount.toFixed(2);
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      tipAmount: newTipAmount,
     }));
   };
 
@@ -155,6 +175,8 @@ export const CreateOrder = ({ currentUser }) => {
           <input
             className="create-order__input--money"
             type="number"
+            value={order.tipAmount}
+            onChange={handleTipAmountChange}
             id="tip"
             min="0"
             step="0.01"
@@ -166,7 +188,9 @@ export const CreateOrder = ({ currentUser }) => {
         </div>
       </div>
       <div className="create-order__form--pizzas">
-        <Pizza />
+        {pizzas.map((pizza) => (
+          <Pizza pizza={pizza} />
+        ))}
       </div>
       <div className="create-order__btn-container">
         <button className="btn-primary">Add Pizza</button>

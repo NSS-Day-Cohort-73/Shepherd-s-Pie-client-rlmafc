@@ -3,7 +3,7 @@ import { getAllToppings } from "../../services/toppingService";
 import { Topping } from "./Topping";
 import { useState, useEffect } from "react";
 
-export const Pizza = () => {
+export const Pizza = ({pizza}) => {
   const [sizes, setSizes] = useState([]);
   const [cheeses, setCheeses] = useState([]);
   const [sauces, setSauces] = useState([]);
@@ -30,10 +30,10 @@ export const Pizza = () => {
       <div className="pizza__container">
         <fieldset className="pizza__fieldset--select">
           <legend>
-            <label htmlFor="sauceId">Size </label>
-            <select id="sauceId">
+            <label htmlFor="sizeId">Size </label>
+            <select id="sizeId">
               <option value="">-- Please choose an option --</option>
-              {sauces.map((item) => (
+              {sizes.map((item) => (
                 <option key={item.id} value={item.id}>
                   {item.name}
                 </option>
@@ -45,6 +45,11 @@ export const Pizza = () => {
             <label htmlFor="cheeseId">Cheese </label>
             <select id="cheeseId">
               <option value="">-- Please choose an option --</option>
+              {cheeses.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
             </select>
           </legend>
 
@@ -52,6 +57,11 @@ export const Pizza = () => {
             <label htmlFor="sauceId">Sauce </label>
             <select id="sauceId">
               <option value="">-- Please choose an option --</option>
+              {sauces.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
             </select>
           </legend>
         </fieldset>
