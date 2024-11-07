@@ -1,10 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Reports.css"
+import { getAllEmployeeOrders, getAllOrders } from "../../services/orderService";
+import { Order } from "../orders/Order";
 
 export const Reports = () => {
     const [startDate, setStartDate] = useState(new Date().toISOString().slice(0,10))
     const [endDate, setEndDate] = useState(new Date().toISOString().slice(0,10))
+    const [orders, setOrders] = useState([])
+    const [employeeOrders, setEmployeeOrders] = useState([])
 
+    const getAndSetOrders = () => {
+        getAllOrders().then((ordersArray) => {
+            const filteredOrders = ordersArray.filter((order) =>
+                order.date.slice(0,10) <= endDate && order.date.slice(0,10) >= startDate
+            )
+            setOrders(filteredOrders)
+        })
+        getAllEmployeeOrders().then((data) => {
+            setEmployeeOrders(data)
+        })
+    }
+
+    useEffect(() => {
+        getAndSetOrders()
+    }, [startDate, endDate])
 
     return (
         <article className="reports">
@@ -65,9 +84,11 @@ export const Reports = () => {
                     </div>
                 </div>
             </section>
-            <section className="reports-orders">
-
-            </section>
+            <ul className="reports-orders">
+                {orders.map((order) => 
+                    <Order key={order.id} order={order} employeeOrders={employeeOrders} getAndSetOrders={getAndSetOrders} />
+                )}           
+            </ul>
         </article>
     );
 };
