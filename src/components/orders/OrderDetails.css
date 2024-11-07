@@ -1,0 +1,61 @@
+.order-detail {
+    display:flex;
+    flex-direction: column;
+    background-color: var(--lightest);
+}
+
+.order-detail-header {
+    display:flex;
+    border: 3px var(--dark) solid;
+    border-radius: 10px;
+    margin:10px;
+    background-color: var(--light);
+    padding: 5px;
+    
+}
+
+.order-detail-header-info {
+    flex-basis:25%;
+    border: 2px var(--accent) solid;
+    border-radius: 10px;
+    background-color: var(--lightest);
+    margin: 3px;
+    padding: 5px;
+}
+
+.order-detail-header-info > h4, .order-detail-header-info > div {
+    justify-self: center;
+    margin: 5px;
+}
+
+.order-detail-header-delivery {
+    display:flex;
+    justify-self: center;
+}
+
+.order-detail-btn-container {
+    display:flex;
+    border: 3px var(--dark) solid;
+    border-radius: 10px;
+    justify-content: center;
+    margin:10px;
+    background-color: var(--light);
+}
+
+.order-detail-btn-edit {
+    background-color: var(--lightest);
+    margin: 5px;
+    border: 2px var(--accent) solid;
+    border-radius: 5px;
+    padding: 3px;
+    width: 60px;
+}
+
+.order-detail-btn-delete {
+    background-color: rgba(255, 0, 0, 0.315) ;
+    margin: 5px;
+    border: 2px var(--darkest) solid;
+    border-radius: 5px;
+    padding: 3px;
+    width: 60px;
+}

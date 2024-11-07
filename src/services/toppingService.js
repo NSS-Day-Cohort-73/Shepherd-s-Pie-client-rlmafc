@@ -34,3 +34,12 @@ export const deletePizzaToppingById = async (pizzaToppingId) => {
         console.error("Error deleting pizza record", error);
     }
 }
+
+export const getPizzaToppingsByPizzaId = async (pizzaId) => {
+    try {
+        const response = await fetch(`http://localhost:8088/pizzaToppings?pizzaId=${pizzaId}&_expand=topping`)
+        return response.json()
+    } catch (error) {
+        console.error("Error fetching pizzaToppings.", error)
+    }
+} 

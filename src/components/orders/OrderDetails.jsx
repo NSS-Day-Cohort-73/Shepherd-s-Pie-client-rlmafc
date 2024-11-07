@@ -5,12 +5,15 @@
 import { useEffect, useState } from "react";
 import "./OrderDetails.css"
 import { useNavigate, useParams } from "react-router-dom";
-import { getAllOrders, getEmployeeOrdersByOrderId } from "../../services/orderService";
+import { deleteOrder, getAllOrders, getEmployeeOrdersByOrderId } from "../../services/orderService";
+import { getPizzasByOrderId } from "../../services/pizzaService";
+import { PizzaInfo } from "./PizzaInfo";
 
 export const OrderDetails = () => {
 
     const { orderId } = useParams()
     const [order, setOrder] = useState({})
+    const [pizzas, setPizzas] = useState([])
     const [employeeOrders, setEmployeeOrders] = useState([])
     const navigate = useNavigate()
 
@@ -21,6 +24,9 @@ export const OrderDetails = () => {
         getEmployeeOrdersByOrderId(orderId).then((empOrderArray) => {
             setEmployeeOrders(empOrderArray)
         })
+        getPizzasByOrderId(orderId).then((pizzasArray) => {
+            setPizzas(pizzasArray)
+        })
     }, [orderId])
 
     return (
@@ -28,37 +34,46 @@ export const OrderDetails = () => {
             <section className="order-detail-header">
                 <div className="order-detail-header-info">
                     <h4>Delivery</h4>
-                    <div>
-                        <div>Yes</div>
-                        <div>No</div>
+                    <div className="order-detail-header-delivery">
+                        <input type="radio" readOnly checked={!order.tableNumber ? "checked" : ""} />Yes
+                        <input type="radio" readOnly checked={order.tableNumber ? "checked": ""} />No
                     </div>
                 </div>
                 {order.tableNumber ? (
                     <div className="order-detail-header-info">
                         <h4>Table #</h4>
-                        <div></div>
+                        <div>{order.tableNumber}</div>
                     </div>    
                 ) : (
                     <div className="order-detail-header-info">
                         <h4>Delivery Driver</h4>
-                        <div></div>
+                        <div>
+                            {employeeOrders.find((empOrder) => 
+                                !empOrder.tookOrder
+                            )?.employee?.fullName}
+                        </div>
                     </div>
                 )}
                 <div className="order-detail-header-info">
                     <h4>Tip</h4>
-                    <div></div>
+                    <div>{order.tipAmount}.00</div>
                 </div>
                 <div className="order-detail-header-info">
-
+                    <h4>Total</h4>
+                    <div>xxxx</div>
                 </div>
             </section>
-            <section className="order-detail-body">
-                
-            </section>
+            {pizzas.map((pizza) => 
+                <PizzaInfo pizza={pizza} key={pizza.id}/>
+            )}
             <section className="order-detail-btn-container">
                 <div>
                     <button
                         className="order-detail-btn-edit"
+                        value={order.id}
+                        onClick={(event) => {
+                            navigate(`/orders/edit/${event.target.value}`)
+                        }}
                     >
                         Edit
                     </button>
@@ -66,6 +81,12 @@ export const OrderDetails = () => {
                 <div>
                     <button 
                         className="order-detail-btn-delete"
+                        value={order.id}
+                        onClick={(event) => {
+                            deleteOrder(event.target.value).then(() => {
+                                navigate("/orders/view")
+                            })
+                        }}
                     >
                         Delete
                     </button>

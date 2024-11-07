@@ -48,7 +48,7 @@ export const deleteOrder = async (orderId) => {
     await fetch(`http://localhost:8088/orders/${orderId}`, {
       method: "DELETE",
     });
-    console.log("Order ${orderId} deleted.");
+    console.log(`Order ${orderId} deleted.`);
   } catch (error) {
     console.error("Error deleting order", error);
   }
@@ -80,7 +80,7 @@ export const createEmployeeOrder = async (newEmployeeOrder) => {
 
 export const getEmployeeOrdersByOrderId = async (orderId) => {
     try {
-        const response = await fetch(`http://localhost:8088/employeeOrders?orderId=${orderId}`)
+        const response = await fetch(`http://localhost:8088/employeeOrders?orderId=${orderId}&_expand=employee`)
         return response.json()
     } catch (error) {
         console.error("Error fetching employeeOrders.", error)
