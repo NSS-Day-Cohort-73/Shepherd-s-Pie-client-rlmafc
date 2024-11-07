@@ -5,7 +5,7 @@ import { getEmployees } from "../../services/employeeService";
 import { Pizza } from "./Pizza";
 import { getAllOrders, updateOrder } from "../../services/orderService";
 import debounce from "lodash.debounce";
-import { getPizzas } from "../../services/pizzaService";
+import { addPizza, getPizzas } from "../../services/pizzaService";
 
 export const CreateOrder = ({ currentUser }) => {
   const location = useLocation();
@@ -38,6 +38,14 @@ export const CreateOrder = ({ currentUser }) => {
     }
   }, 1000);
 
+  const getAndSetPizzas = async () => {
+    const pizzaData = await getPizzas();
+    const filteredPizzaData = pizzaData.filter(
+      (item) => item.orderId === orderId
+    );
+    setPizzas(filteredPizzaData);
+  };
+
   // // Fetch initial data
   useEffect(() => {
     const fetchData = async () => {
@@ -49,11 +57,7 @@ export const CreateOrder = ({ currentUser }) => {
       const employeesData = await getEmployees();
       setEmployees(employeesData);
 
-      const pizzaData = await getPizzas();
-      const filteredPizzaData = pizzaData.filter(
-        (item) => item.orderId === orderId
-      );
-      setPizzas(filteredPizzaData);
+      await getAndSetPizzas();
 
       setLoaded(true); // Data is loaded
     };
@@ -100,6 +104,17 @@ export const CreateOrder = ({ currentUser }) => {
       ...prevOrder,
       tipAmount: newTipAmount,
     }));
+  };
+
+  const handleAddPizza = async (event) => {
+    event.preventDefault();
+    await addPizza({
+      sizeId: 1,
+      cheeseId: 1,
+      sauceId: 1,
+      orderId: orderId,
+    });
+    getAndSetPizzas();
   };
 
   return (
@@ -189,11 +204,17 @@ export const CreateOrder = ({ currentUser }) => {
       </div>
       <div className="create-order__form--pizzas">
         {pizzas.map((pizzaObj) => (
-          <Pizza pizzaObj={pizzaObj} key={pizzaObj.id} />
+          <Pizza
+            pizzaObj={pizzaObj}
+            key={pizzaObj.id}
+            getAndSetPizzas={getAndSetPizzas}
+          />
         ))}
       </div>
       <div className="create-order__btn-container">
-        <button className="btn-primary">Add Pizza</button>
+        <button className="btn-primary" onClick={handleAddPizza}>
+          Add Pizza
+        </button>
         <button className="btn-primary">Place Order</button>
       </div>
     </div>

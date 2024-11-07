@@ -18,10 +18,11 @@ button {
   margin: 0;
   width: 100%;
   padding: 0.5rem;
+  box-sizing: border-box;
 }
 
 .navbar-item {
-  flex-basis: 20%;
+  flex-grow: 1;
   list-style-type: none;
   text-align: center;
   color: var(--lightest);

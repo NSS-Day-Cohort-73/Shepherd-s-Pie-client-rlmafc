@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .create-order__form--order {
@@ -21,6 +22,10 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-around;
+  margin: 1em;
+  background-color: var(--light);
+  padding: 0.5em;
+  border-radius: 8px;
 }
 
 .pizza__fieldset--checkbox {
@@ -51,10 +56,7 @@
 }
 
 .create-order__form--pizzas {
-  background-color: var(--light);
-  padding: 1em;
   width: 90%;
-  border-radius: 8px;
 }
 
 .btn-delete {

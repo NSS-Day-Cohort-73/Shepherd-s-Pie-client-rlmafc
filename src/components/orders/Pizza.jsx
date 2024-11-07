@@ -1,11 +1,11 @@
 import { getCheeses, getSauces, getSizes } from "../../services/extraService";
-import { updatePizza } from "../../services/pizzaService";
+import { removePizzaById, updatePizza } from "../../services/pizzaService";
 import { getAllToppings } from "../../services/toppingService";
 import { Topping } from "./Topping";
 import { useState, useEffect } from "react";
 import debounce from "lodash.debounce";
 
-export const Pizza = ({ pizzaObj }) => {
+export const Pizza = ({ pizzaObj, getAndSetPizzas }) => {
   //Dropdown Arrays
   const [sizes, setSizes] = useState([]);
   const [cheeses, setCheeses] = useState([]);
@@ -56,6 +56,12 @@ export const Pizza = ({ pizzaObj }) => {
       ...prevPizza,
       [name]: parseInt(value),
     }));
+  };
+
+  const handleDelete = async (event) => {
+    event.preventDefault();
+    await removePizzaById(pizza.id);
+    await getAndSetPizzas();
   };
 
   return (
@@ -116,10 +122,16 @@ export const Pizza = ({ pizzaObj }) => {
 
         <fieldset className="pizza__fieldset--checkbox">
           {toppings.map((toppingObj) => (
-            <Topping key={toppingObj.id} toppingObj={toppingObj} pizza={pizza} />
+            <Topping
+              key={toppingObj.id}
+              toppingObj={toppingObj}
+              pizza={pizza}
+            />
           ))}
         </fieldset>
-        <button className="btn-delete">X</button>
+        <button onClick={handleDelete} className="btn-delete">
+          X
+        </button>
       </div>
     </div>
   );
