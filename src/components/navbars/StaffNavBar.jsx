@@ -1,20 +1,11 @@
 import "./NavBar.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { handleCreateOrder } from "./AdminNavBar";
 
 export const StaffNavBar = () => {
   const navigate = useNavigate();
 
-  const handleCreateOrder = async () => {
-    const orderObject = {
-      tableNumber: 0,
-      date: new Date(),
-      tipAmount: 0,
-      complete: false,
-    };
-    const order = await CreateOrder(orderObject);
-    navigate(`/orders/create/${order.id}`);
-  };
   return (
     <ul className="navbar">
       <li className="navbar-item dropdown">
@@ -26,7 +17,10 @@ export const StaffNavBar = () => {
             </Link>
           </li>
           <li>
-            <button className="navbar-link" onClick={handleCreateOrder}>
+            <button
+              className="navbar-link"
+              onClick={() => handleCreateOrder(currentUser, navigate)}
+            >
               Create Order
             </button>
           </li>

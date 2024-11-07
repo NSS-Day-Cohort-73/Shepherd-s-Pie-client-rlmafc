@@ -1,33 +1,65 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import "./CreateOrder.css";
 import { getEmployees } from "../../services/employeeService";
 import { Pizza } from "./Pizza";
+import { getAllOrders, updateOrder } from "../../services/orderService";
+import debounce from "lodash.debounce";
 
 export const CreateOrder = ({ currentUser }) => {
-  // Just a quick note that we'll have to check if useParams is false when creating the employeeOrders entry for the person taking the order
-  const [delivery, setDelivery] = useState(false);
-  const { orderId } = useParams();
-  const [order, setOrder] = useState({});
-  const [employees, setEmployees] = useState([]);
-  const [deliveryDriver, setDeliveryDriver] = useState(null);
-  const [tableNumber, setTableNumber] = useState(1);
+  const location = useLocation();
+  const isCreate = location.pathname.includes("create");
 
+  let { orderId } = useParams();
+  orderId = parseInt(orderId, 10);
+
+  const [order, setOrder] = useState({
+    // id: null,
+    // tableNumber: 1,
+    // date: "",
+    // tipAmount: 0,
+    // complete: false,
+  });
+  const [employees, setEmployees] = useState([]);
+  const [delivery, setDelivery] = useState(false);
+  const [deliveryDriver, setDeliveryDriver] = useState(null);
+  const [loaded, setLoaded] = useState(false); // New loaded flag
+
+  const saveOrder = debounce(async (order) => {
+    if (loaded) {
+      try {
+        await updateOrder(order);
+        console.log("Order auto-saved");
+      } catch (error) {
+        console.error("Failed to save order", error);
+      }
+    }
+  }, 1000);
+
+  // // Fetch initial data
   useEffect(() => {
     const fetchData = async () => {
-      setOrder({
-        tableNumber: 0,
-        date: new Date(),
-        tipAmount: 0.0,
-        complete: false,
-      });
+      if (!orderId) return; // Skip if no orderId
+
+      const thisOrder = await getAllOrders(orderId);
+      setOrder(thisOrder);
 
       const employeesData = await getEmployees();
       setEmployees(employeesData);
+
+      setLoaded(true); // Data is loaded
     };
 
     fetchData();
-  }, []);
+  }, [orderId]);
+
+  // // Save order after initial data load and only when order changes
+  useEffect(() => {
+    //   if (!loaded || !order.id) return; // Only save if data is loaded and order.id exists
+
+    saveOrder(order);
+    //   return () => saveOrder.cancel();
+  }, [order, loaded]);
 
   const handleDelivery = (event) => {
     setDelivery(event.target.value === "true");
@@ -42,9 +74,17 @@ export const CreateOrder = ({ currentUser }) => {
     });
   };
 
+  const handleTableNumberChange = (event) => {
+    const newTableNumber = parseInt(event.target.value) || 1;
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      tableNumber: newTableNumber,
+    }));
+  };
+
   return (
     <div className="create-order__container">
-      <h2>{!orderId ? "Create Order" : "Edit Order"}</h2>
+      <h2>{isCreate ? "Create Order" : "Edit Order"}</h2>
       <div className="create-order__form--order">
         <fieldset className="create-order__fieldset">
           <legend>Delivery</legend>
@@ -100,8 +140,8 @@ export const CreateOrder = ({ currentUser }) => {
           ) : (
             <input
               type="number"
-              value={tableNumber}
-              onChange={(e) => setTableNumber(e.target.value)}
+              value={order.tableNumber || 1}
+              onChange={handleTableNumberChange}
               id="table"
               min={1}
               max={12}
@@ -117,7 +157,7 @@ export const CreateOrder = ({ currentUser }) => {
             type="number"
             id="tip"
             min="0"
-            step="0.01" // Allows decimal values for cents
+            step="0.01"
           />
         </fieldset>
         <div className="create-order__fieldset">

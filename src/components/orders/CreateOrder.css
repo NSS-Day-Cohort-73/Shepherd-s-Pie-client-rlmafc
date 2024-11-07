@@ -50,19 +50,23 @@
   color: var(--dark);
 }
 
-.create-order__form--pizzas{
+.create-order__form--pizzas {
   background-color: var(--light);
   padding: 1em;
   width: 90%;
   border-radius: 8px;
 }
 
-.btn-delete{
+.btn-delete {
   width: 1.5em;
-  height:1.5em;
+  height: 1.5em;
   background-color: var(--darkest);
   color: var(--lightest);
   text-align: center;
   font-weight: bold;
   border-radius: 25%;
+}
+
+.btn-delete:hover {
+  background-color: var(--accent);
 }

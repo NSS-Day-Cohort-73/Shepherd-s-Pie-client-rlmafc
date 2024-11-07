@@ -31,8 +31,13 @@ export const Pizza = () => {
         <fieldset className="pizza__fieldset--select">
           <legend>
             <label htmlFor="sauceId">Size </label>
-            <select id="sizeId">
+            <select id="sauceId">
               <option value="">-- Please choose an option --</option>
+              {sauces.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
             </select>
           </legend>
 
