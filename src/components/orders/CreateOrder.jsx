@@ -26,7 +26,7 @@ export const CreateOrder = ({ currentUser }) => {
   orderId = parseInt(orderId, 10);
 
   const [order, setOrder] = useState({
-    tableNumber: 0,
+    tableNumber: 1,
     date: "",
     tipAmount: 0.0,
     complete: false,
