@@ -8,7 +8,7 @@ export const Order = ({ order, employeeOrders, getAndSetOrders }) => {
   
     return (
         <li className="order" value={order.id} key={order.id}>
-            <Link to={order.id.toString()} className="order-details" >
+            <Link to={`/orders/view/${order.id}`} className="order-details" >
                 <div className="order-header">
                     <div className="order-number">
                         Order #{order.id}
