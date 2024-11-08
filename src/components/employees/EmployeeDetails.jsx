@@ -34,7 +34,7 @@ export const EmployeeDetails = () => {
   }
   // handle edit employee
   const handleEditEmployee = () => {
-    navigate(`/employees/edit/${employee.id}`)
+    navigate(`/employee/edit/${employee.id}`)
   }
 
   if (error) {

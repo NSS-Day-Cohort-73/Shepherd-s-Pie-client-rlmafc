@@ -1,10 +1,11 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { addEmployee } from "../../services/employeeService"
+import { useEffect, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
+import { getEmployees, updateEmployee } from "../../services/employeeService"
 
-export const CreateEmployee = () => {
+export const EditEmployee = () => {
+  const { employeeId } = useParams()
   const navigate = useNavigate()
-
+  const [error, setError] = useState(null)
   const [employee, setEmployee] = useState({
     fullName: "",
     email: "",
@@ -13,28 +14,40 @@ export const CreateEmployee = () => {
     isAdmin: false,
   })
 
-  const [error, setError] = useState(null)
+  useEffect(() => {
+    const fetchEmployee = async () => {
+      try {
+        const info = await getEmployees(employeeId)
+        setEmployee(info)
+      } catch (error) {
+        setError("Failed to load employee details.")
+      }
+    }
+    fetchEmployee()
+  }, [employeeId])
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target
-    setEmployee((editEmployee) => ({
-      ...editEmployee,
+    setEmployee((prevEmployee) => ({
+      ...prevEmployee,
       [name]: type === "checkbox" ? checked : value,
     }))
   }
 
+  // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
-      await addEmployee(employee)
-      navigate("/employees/view")
+      await updateEmployee(employee)
+      navigate(`/employees/view/${employee.id}`)
     } catch (error) {
-      setError("Failed to create employee.")
+      setError("Failed to update employee.")
     }
   }
+
   return (
     <div>
-      <h1>New Employee</h1>
+      <h1>Edit Employee</h1>
       <form onSubmit={handleSubmit}>
         <label>
           Full Name:
@@ -90,9 +103,7 @@ export const CreateEmployee = () => {
           />
         </label>
         <br />
-        <div className="create-employee-submit-btn">
-          <button type="submit">Submit</button>
-        </div>
+        <button type="submit">Save Changes</button>
       </form>
     </div>
   )
