@@ -1,0 +1,53 @@
+.employee-details__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.employee-details__header {
+}
+
+.employee-details__info {
+  padding: 15px;
+  background-color: var --lightest;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.employee-details__buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.employee-details__edit__btn {
+  margin: 1em;
+  background-color: var(--dark);
+  padding: 0.5em;
+  color: var(--lightest);
+  border-radius: 8px;
+}
+
+.employee-details__edit__btn:hover {
+  background-color: var(--accent);
+  cursor: pointer;
+  color: var(--dark);
+}
+
+.employee-details__delete__btn {
+  margin: 1em;
+  background-color: var(--dark);
+  padding: 0.5em;
+  color: var(--lightest);
+  border-radius: 8px;
+}
+
+.employee-details__delete__btn:hover {
+  background-color: var(--accent);
+  cursor: pointer;
+  color: var(--dark);
+}

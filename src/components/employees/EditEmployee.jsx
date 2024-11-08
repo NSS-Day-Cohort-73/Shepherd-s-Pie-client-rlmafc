@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { getEmployees, updateEmployee } from "../../services/employeeService"
+import "./EditEmployee.css"
 
 export const EditEmployee = () => {
   const { employeeId } = useParams()
@@ -46,10 +47,12 @@ export const EditEmployee = () => {
   }
 
   return (
-    <div>
-      <h1>Edit Employee</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
+    <div className="edit-employee__container">
+      <div className="edit-employee__header">
+        <h1>Edit Employee</h1>
+      </div>
+      <form onSubmit={handleSubmit} className="edit-employee__form">
+        <label className="edit-employee__label">
           Full Name:
           <input
             type="text"
@@ -57,10 +60,11 @@ export const EditEmployee = () => {
             value={employee.fullName}
             onChange={handleChange}
             required
+            className="edit-employee__input"
           />
         </label>
         <br />
-        <label>
+        <label className="edit-employee__label">
           Email:
           <input
             type="email"
@@ -68,10 +72,11 @@ export const EditEmployee = () => {
             value={employee.email}
             onChange={handleChange}
             required
+            className="edit-employee__input"
           />
         </label>
         <br />
-        <label>
+        <label className="edit-employee__label">
           Address:
           <input
             type="text"
@@ -79,10 +84,11 @@ export const EditEmployee = () => {
             value={employee.address}
             onChange={handleChange}
             required
+            className="edit-employee__input"
           />
         </label>
         <br />
-        <label>
+        <label className="edit-employee__label">
           Phone:
           <input
             type="text"
@@ -90,20 +96,24 @@ export const EditEmployee = () => {
             value={employee.phone}
             onChange={handleChange}
             required
+            className="edit-employee__input"
           />
         </label>
         <br />
-        <label>
+        <label className="edit-employee__label edit-employee__checkbox-label">
           Admin:
           <input
             type="checkbox"
             name="isAdmin"
             checked={employee.isAdmin}
             onChange={handleChange}
+            className="edit-employee__checkbox"
           />
         </label>
         <br />
-        <button type="submit">Save Changes</button>
+        <button type="submit" className="edit-employee__submit__button">
+          Save Changes
+        </button>
       </form>
     </div>
   )

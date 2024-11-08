@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { addEmployee } from "../../services/employeeService"
+import "./CreateEmployee.css"
 
 export const CreateEmployee = () => {
   const navigate = useNavigate()
@@ -33,10 +34,12 @@ export const CreateEmployee = () => {
     }
   }
   return (
-    <div>
-      <h1>New Employee</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
+    <div className="create-employee__container">
+      <div className="create-employee__header">
+        <h1>New Employee</h1>
+      </div>
+      <form onSubmit={handleSubmit} className="create-employee__form">
+        <label className="create-employee__label">
           Full Name:
           <input
             type="text"
@@ -44,10 +47,11 @@ export const CreateEmployee = () => {
             value={employee.fullName}
             onChange={handleChange}
             required
+            className="create-employee__input"
           />
         </label>
         <br />
-        <label>
+        <label className="create-employee__label">
           Email:
           <input
             type="email"
@@ -55,10 +59,11 @@ export const CreateEmployee = () => {
             value={employee.email}
             onChange={handleChange}
             required
+            className="create-employee__input"
           />
         </label>
         <br />
-        <label>
+        <label className="create-employee__label">
           Address:
           <input
             type="text"
@@ -66,10 +71,11 @@ export const CreateEmployee = () => {
             value={employee.address}
             onChange={handleChange}
             required
+            className="create-employee__input"
           />
         </label>
         <br />
-        <label>
+        <label className="create-employee__label">
           Phone:
           <input
             type="text"
@@ -77,20 +83,22 @@ export const CreateEmployee = () => {
             value={employee.phone}
             onChange={handleChange}
             required
+            className="create-employee__input"
           />
         </label>
         <br />
-        <label>
+        <label className="create-employee__label create-employee__checkbox-label">
           Admin:
           <input
             type="checkbox"
             name="isAdmin"
             checked={employee.isAdmin}
             onChange={handleChange}
+            className="create-employee__checkbox"
           />
         </label>
         <br />
-        <div className="create-employee-submit-btn">
+        <div className="create-employee__submit__button">
           <button type="submit">Submit</button>
         </div>
       </form>

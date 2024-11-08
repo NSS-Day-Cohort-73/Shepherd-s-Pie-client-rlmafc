@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { deleteEmployee, getEmployees } from "../../services/employeeService"
+import "./EmployeeDetails.css"
 
 export const EmployeeDetails = () => {
   // get employeeId from the url
@@ -45,18 +46,30 @@ export const EmployeeDetails = () => {
   }
   return (
     <div>
-      <div className="employee-details-container">
-        <h1>Employee Details</h1>
-        <h2>{employee.fullName}</h2>
-        <p>Email: {employee.email}</p>
-        <p>Address: {employee.address}</p>
-        <p>Phone: {employee.phone}</p>
+      <div className="employee-details__container">
+        <div className="employee-details__header">
+          <h1>Employee Details</h1>
+        </div>
+        <div className="employee-details__info">
+          <h2>{employee.fullName}</h2>
+          <p>Email: {employee.email}</p>
+          <p>Address: {employee.address}</p>
+          <p>Phone: {employee.phone}</p>
+        </div>
       </div>
-      <div className="employee-details-edit-btn">
-        <button onClick={handleEditEmployee}>Edit</button>
-      </div>
-      <div className="employee-details-delete-btn">
-        <button onClick={handleDeleteEmployee}>Delete</button>
+      <div className="employee-details__buttons">
+        <button
+          onClick={handleEditEmployee}
+          className="employee-details__edit__btn"
+        >
+          Edit
+        </button>
+        <button
+          onClick={handleDeleteEmployee}
+          className="employee-details__delete__btn"
+        >
+          Delete
+        </button>
       </div>
     </div>
   )
