@@ -11,7 +11,11 @@ import {
   updateOrder,
 } from "../../services/orderService";
 import debounce from "lodash.debounce";
-import { addPizza, getPizzas } from "../../services/pizzaService";
+import {
+  addPizza,
+  getPizzas,
+  getPizzasBySize,
+} from "../../services/pizzaService";
 
 export const CreateOrder = ({ currentUser }) => {
   const location = useLocation();
@@ -34,13 +38,15 @@ export const CreateOrder = ({ currentUser }) => {
   const [loaded, setLoaded] = useState(false); //loaded flag
   const [pizzas, setPizzas] = useState([]);
   const [total, setTotal] = useState(0);
-  const [tip, setTip] = useState(0);
   const [sizePrice, setSizePrice] = useState(0);
   const [toppingPrice, setToppingPrice] = useState(0);
 
-  //TODO: make this function work
   const updateTotal = () => {
-    setTotal(tip + sizePrice + toppingPrice);
+    if (delivery) {
+      setTotal(order.tipAmount + sizePrice + toppingPrice + 5);
+    } else {
+      setTotal(order.tipAmount + sizePrice + toppingPrice);
+    }
   };
 
   const saveOrder = debounce(async (order) => {
@@ -61,6 +67,19 @@ export const CreateOrder = ({ currentUser }) => {
     } catch (error) {
       console.error("Failed to complete order", error);
     }
+  };
+
+  const getAndSetSizePrice = async () => {
+    const allPizzaSizes = await getPizzasBySize();
+    const pizzaIds = new Set(pizzas.map((pizza) => pizza.id)); //creates a Set of pizzaIds for faster lookup
+    const filteredPizzaSizes = allPizzaSizes.filter((item) =>
+      pizzaIds.has(item.id)
+    );
+    const sum = filteredPizzaSizes.reduce(
+      (accumulator, item) => accumulator + item.size.price,
+      0
+    );
+    setSizePrice(sum);
   };
 
   const getAndSetPizzas = async () => {
@@ -91,9 +110,16 @@ export const CreateOrder = ({ currentUser }) => {
   }, [orderId]);
 
   // // Save order after initial data load and only when order changes
+  // useEffect for saving the order
   useEffect(() => {
     saveOrder(order);
   }, [order, loaded, pizzas]);
+
+  // useEffect for updating the total
+  useEffect(() => {
+    updateTotal();
+  }, [sizePrice, toppingPrice, order.tipAmount, delivery]);
+
   const handleDelivery = async (event) => {
     const isDelivery = event.target.value === "true";
     setDelivery(isDelivery);
@@ -145,6 +171,7 @@ export const CreateOrder = ({ currentUser }) => {
       ...prevOrder,
       tipAmount: parseFloat(newTipAmount.toFixed(2)),
     }));
+    updateTotal();
   };
 
   const handleAddPizza = async (event) => {
@@ -238,10 +265,10 @@ export const CreateOrder = ({ currentUser }) => {
             step="0.01"
           />
         </fieldset>
-        <div className="create-order__fieldset">
-          <p>Total:</p>
-          $0.00
-        </div>
+        <fieldset className="create-order__fieldset">
+          <legend>Total:</legend>
+          <span class="create-order-total__span">${total}</span>
+        </fieldset>
       </div>
       <div className="create-order__form--pizzas">
         {pizzas.map((pizzaObj) => (
@@ -249,6 +276,10 @@ export const CreateOrder = ({ currentUser }) => {
             pizzaObj={pizzaObj}
             key={pizzaObj.id}
             getAndSetPizzas={getAndSetPizzas}
+            getAndSetSizePrice={getAndSetSizePrice}
+            updateTotal={updateTotal}
+            setToppingPrice={setToppingPrice}
+            pizzas={pizzas}
           />
         ))}
       </div>

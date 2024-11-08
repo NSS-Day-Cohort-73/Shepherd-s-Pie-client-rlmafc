@@ -3,12 +3,38 @@ import {
   getPizzaToppings,
   createPizzaTopping,
   deletePizzaTopping,
+  getExpandedPizzaToppings,
 } from "../../services/toppingService";
 
-export const Topping = ({ toppingObj, pizza }) => {
+export const Topping = ({
+  toppingObj,
+  pizza,
+  pizzas,
+  setToppingPrice,
+  updateTotal,
+}) => {
   const [topping, setTopping] = useState(null);
   const [currentToppingId, setCurrentToppingId] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
+
+  useEffect(() => {
+    const toppingCalculations = async () => {
+      const expandedPizzaToppings = await getExpandedPizzaToppings();
+      const filteredExpandedPizzaToppings = expandedPizzaToppings.filter(
+        (item) =>
+          pizzas.some(
+            (thisPizza) => item.pizza && thisPizza.id === item.pizza.id
+          )
+      );
+      const totalToppingPrice = filteredExpandedPizzaToppings.reduce(
+        (accumulator, item) => accumulator + item.topping.price,
+        0
+      );
+      setToppingPrice(totalToppingPrice);
+      updateTotal();
+    };
+    toppingCalculations();
+  }, [currentToppingId]);
 
   useEffect(() => {
     const fetchData = async () => {

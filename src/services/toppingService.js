@@ -7,6 +7,17 @@ export const getAllToppings = async () => {
   }
 };
 
+export const getExpandedPizzaToppings = async () => {
+  try {
+    const response = await fetch(
+      `http://localhost:8088/pizzaToppings?_expand=pizza&_expand=topping`
+    );
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching pizzaToppings.", error);
+  }
+};
+
 export const createPizzaTopping = async (pizzaToppingObject) => {
   try {
     const response = await fetch("http://localhost:8088/pizzaToppings", {
