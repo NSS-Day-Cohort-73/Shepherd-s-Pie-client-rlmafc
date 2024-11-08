@@ -1,0 +1,41 @@
+.view-employees__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.view-employees__header {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.employee-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 800px;
+  padding: 0;
+  list-style-type: none;
+}
+
+.employee-list__item {
+  padding: 15px;
+  background-color: var --lightest;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.employee-list__item:hover {
+  transform: scale(1.05);
+}
+
+.employee-link {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}

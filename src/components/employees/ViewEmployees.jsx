@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import "./ViewEmployees.css"
 
 export const ViewEmployees = ({ currentUser }) => {
   const [employees, setEmployees] = useState([])
@@ -27,17 +28,24 @@ export const ViewEmployees = ({ currentUser }) => {
     return <p>No employees found.</p>
   }
   return (
-    <div>
-      <h1>The Shepherd's Pie Family</h1>
-      <ul>
-        {employees.map((employee) => (
-          <li key={employee.id}>
-            <Link to={`/employees/view/${employee.id}`}>
-              {employee.fullName}
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <div className="view-employees__container">
+      <div className="view-employees__header">
+        <h1>The Shepherd's Pie Family</h1>
+      </div>
+      <div>
+        <ul className="employee-list">
+          {employees.map((employee) => (
+            <li key={employee.id} className="employee-list__item">
+              <Link
+                to={`/employees/view/${employee.id}`}
+                className="employee-link"
+              >
+                {employee.fullName}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   )
 }
