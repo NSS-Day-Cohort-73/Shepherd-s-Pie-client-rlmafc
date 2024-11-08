@@ -64,9 +64,9 @@ export const OrderDetails = () => {
     const getTotal = async () => {
       const toppingTotal = await toppingCalculations();
       const sizeTotal = await getSizePrice();
-      !order.tableNumber
-        ? setTotal(order.tipAmount + toppingTotal + sizeTotal)
-        : setTotal(order.tipAmount + toppingTotal + sizeTotal + 5);
+      const tipAmount = parseFloat(order.tipAmount || 0);
+      const deliveryCharge = !order.tableNumber ? 0 : 5;
+      setTotal(tipAmount + toppingTotal + sizeTotal + deliveryCharge);
     };
     getTotal();
   }, [order, pizzas]);
@@ -98,11 +98,11 @@ export const OrderDetails = () => {
         )}
         <div className="order-detail-header-info">
           <h4>Tip</h4>
-          <div>{order.tipAmount}.00</div>
+          <div>{order.tipAmount}</div>
         </div>
         <div className="order-detail-header-info">
           <h4>Total</h4>
-          <div>{total}</div>
+          <div>{Number(total)}</div>
         </div>
       </section>
       {pizzas.map((pizza) => (
