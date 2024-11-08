@@ -267,7 +267,7 @@ export const CreateOrder = ({ currentUser }) => {
         </fieldset>
         <fieldset className="create-order__fieldset">
           <legend>Total:</legend>
-          <span class="create-order-total__span">${total}</span>
+          <span className="create-order-total__span">${total}</span>
         </fieldset>
       </div>
       <div className="create-order__form--pizzas">
