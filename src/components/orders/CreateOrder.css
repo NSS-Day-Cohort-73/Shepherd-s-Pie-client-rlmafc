@@ -1,9 +1,21 @@
+select,
+input {
+  height: 1.5em;
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  margin: 3px;
+}
+
 .create-order__container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  width: 100%;
+}
+.create-order-total__span {
+  font-weight: bold;
 }
 
 .create-order__form--order {
@@ -15,12 +27,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 1em;
+  background-color: var(--lightest);
+  border: 3px solid var(--accent);
+  padding: 0.5em;
+  border-radius: 8px;
 }
 
 .pizza__container {
   display: flex;
   align-items: flex-start;
   justify-content: space-around;
+  margin: 1em;
+  background-color: var(--lightest);
+  border: 3px solid var(--accent);
+  padding: 0.5em;
+  border-radius: 8px;
 }
 
 .pizza__fieldset--checkbox {
@@ -50,9 +72,23 @@
   color: var(--dark);
 }
 
-.create-order__form--pizzas{
-  background-color: var(--light);
-  padding: 1em;
+.create-order__form--pizzas {
   width: 90%;
+  background-color: var(--light);
+  border: 3px solid var(--dark);
   border-radius: 8px;
+}
+
+.btn-delete {
+  width: 1.5em;
+  height: 1.5em;
+  background-color: var(--darkest);
+  color: var(--lightest);
+  text-align: center;
+  font-weight: bold;
+  border-radius: 25%;
+}
+
+.btn-delete:hover {
+  background-color: var(--accent);
 }
