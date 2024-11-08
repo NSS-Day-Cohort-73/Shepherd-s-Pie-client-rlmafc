@@ -146,11 +146,13 @@ export const CreateOrder = ({ currentUser }) => {
   };
 
   const handleEmployeeChange = async (event) => {
-    setDeliveryDriver((prev) => ({
-      ...prev,
-      employeeId: parseInt(event.target.value),
-    }));
-    await updateEmployeeOrder(deliveryDriver);
+    const newEmployeeId = parseInt(event.target.value);
+    setDeliveryDriver((prev) => {
+      const updatedDriver = { ...prev, employeeId: newEmployeeId };
+      // Update the employee order after setting the new employeeId
+      updateEmployeeOrder(updatedDriver); // Pass updated driver directly
+      return updatedDriver;
+    });
   };
 
   const handleTableNumberChange = (valueOrEvent) => {
