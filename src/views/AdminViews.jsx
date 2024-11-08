@@ -39,7 +39,10 @@ export const AdminViews = ({ currentUser }) => {
           path="orders/create/:orderId"
           element={<CreateOrder currentUser={currentUser} />}
         />
-        <Route path="orders/edit/:orderId" element={<CreateOrder />} />
+        <Route
+          path="orders/edit/:orderId"
+          element={<CreateOrder currentUser={currentUser} />}
+        />
 
         {/* Admin only Routes:   */}
         <Route path="employees/view">
