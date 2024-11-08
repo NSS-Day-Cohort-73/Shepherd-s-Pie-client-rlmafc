@@ -97,10 +97,11 @@ export const CreateEmployee = () => {
             className="create-employee__checkbox"
           />
         </label>
-        <br />
-        <div className="create-employee__submit__button">
-          <button type="submit">Submit</button>
-        </div>
+        <br /> 
+        
+        <button className="create-employee__submit__button" type="submit">
+          Submit
+        </button>
       </form>
     </div>
   )
