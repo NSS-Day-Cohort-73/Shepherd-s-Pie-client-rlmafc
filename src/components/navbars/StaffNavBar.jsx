@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { handleCreateOrder } from "./AdminNavBar";
 
-export const StaffNavBar = () => {
+export const StaffNavBar = ({currentUser}) => {
   const navigate = useNavigate();
 
   return (

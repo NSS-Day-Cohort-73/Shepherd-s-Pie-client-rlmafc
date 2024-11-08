@@ -75,6 +75,7 @@ input {
 .create-order__form--pizzas {
   width: 90%;
   background-color: var(--light);
+  border: 3px solid var(--dark);
   border-radius: 8px;
 }
 
