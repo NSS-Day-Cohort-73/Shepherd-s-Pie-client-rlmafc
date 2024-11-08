@@ -5,7 +5,7 @@ import { createEmployeeOrder, createOrder } from "../../services/orderService";
 
 export const handleCreateOrder = async (currentUser, navigate) => {
   const orderObject = {
-    tableNumber: 0,
+    tableNumber: 1,
     date: new Date(),
     tipAmount: 0,
     complete: false,
