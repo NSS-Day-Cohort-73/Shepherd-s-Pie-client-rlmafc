@@ -34,10 +34,7 @@ export const StaffViews = ({ currentUser }) => {
           path="orders/create/:orderId"
           element={<CreateOrder currentUser={currentUser} />}
         />
-        <Route
-          path="orders/edit/:orderId"
-          element={<CreateOrder currentUser={currentUser} />}
-        />
+        <Route path="orders/edit/:orderId" element={<CreateOrder />} />
       </Route>
     </Routes>
   );

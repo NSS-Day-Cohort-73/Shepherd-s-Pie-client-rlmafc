@@ -18,11 +18,10 @@ button {
   margin: 0;
   width: 100%;
   padding: 0.5rem;
-  box-sizing: border-box;
 }
 
 .navbar-item {
-  flex-grow: 1;
+  flex-basis: 20%;
   list-style-type: none;
   text-align: center;
   color: var(--lightest);
@@ -48,16 +47,15 @@ button {
 .dropdown-content {
   display: none;
   position: absolute;
-  top: 100%; /* Positions directly below the button */
-  left: 50%; /* Positions dropdown from the center of the button */
-  transform: translateX(-50%); /* Centers dropdown */
+  top: 100%; /* Positions below the dropdown link */
+  left: 0;
   background-color: var(--darkest);
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1;
   list-style: none;
   padding: 0;
   margin: 0;
-  min-width: 150px;
+  min-width: 150px; /* Adjust as needed for width */
 }
 
 .dropdown-content li {

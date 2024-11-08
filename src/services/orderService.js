@@ -72,50 +72,17 @@ export const createEmployeeOrder = async (newEmployeeOrder) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newEmployeeOrder),
     });
-    const newObject = await response.json();
-    console.log(newObject)
-    return newObject;
+    return response.json();
   } catch (error) {
     console.error("Error creating order", error);
   }
 };
 
 export const getEmployeeOrdersByOrderId = async (orderId) => {
-  try {
-    const response = await fetch(
-      `http://localhost:8088/employeeOrders?orderId=${orderId}&_expand=employee`
-    );
-    return response.json();
-  } catch (error) {
-    console.error("Error fetching employeeOrders.", error);
-  }
-};
-
-// updating Employee Order
-export const updateEmployeeOrder = async (updatedEmployeeOrder) => {
-  try {
-    const response = await fetch(
-      `http://localhost:8088/employeeorders/${updatedEmployeeOrder.id}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedEmployeeOrder),
-      }
-    );
-    return response.json();
-  } catch (error) {
-    console.error("Error updating order", error);
-  }
-};
-
-// deleting Employee Order
-export const deleteEmployeeOrder = async (employeeOrderId) => {
-  try {
-    await fetch(`http://localhost:8088/employeeorders/${employeeOrderId}`, {
-      method: "DELETE",
-    });
-    console.log(`EmployeeOrder ${employeeOrderId} deleted.`);
-  } catch (error) {
-    console.error("Error deleting Employeeorder", error);
-  }
-};
+    try {
+        const response = await fetch(`http://localhost:8088/employeeOrders?orderId=${orderId}&_expand=employee`)
+        return response.json()
+    } catch (error) {
+        console.error("Error fetching employeeOrders.", error)
+    }
+}

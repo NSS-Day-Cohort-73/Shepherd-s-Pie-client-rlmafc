@@ -5,6 +5,3 @@
   --darkest: #353540; /* bottommost dark gray */
   --accent: #f78d1e; /* rightmost orange */
 }
-body{
-  background-color: var(--lightest);
-}

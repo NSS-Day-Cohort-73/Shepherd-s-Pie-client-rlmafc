@@ -3,29 +3,30 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { createEmployeeOrder, createOrder } from "../../services/orderService";
 
-export const handleCreateOrder = async (currentUser, navigate) => {
-  const orderObject = {
-    tableNumber: 0,
-    date: new Date(),
-    tipAmount: 0,
-    complete: false,
-  };
 
-  const order = await createOrder(orderObject);
-
-  const employeeOrderObject = {
-    employeeId: currentUser.id,
-    orderId: order.id,
-    tookOrder: true,
-  };
-  await createEmployeeOrder(employeeOrderObject);
-
-  navigate(`/orders/create/${order.id}`);
-};
-
-export const AdminNavBar = ({ currentUser }) => {
+export const AdminNavBar = ({currentUser}) => {
   const navigate = useNavigate();
 
+  const handleCreateOrder = async () => {
+    const orderObject = {
+      tableNumber: 0,
+      date: new Date(),
+      tipAmount: 0,
+      complete: false,
+    };
+
+    
+    const order = await createOrder(orderObject);
+
+    const employeeOrderObject = {
+      employeeId: currentUser.id,
+      orderId: order.id,
+      tookOrder: true,
+    };
+    await createEmployeeOrder(employeeOrderObject)
+
+    navigate(`/orders/create/${order.id}`);
+  };
   return (
     <ul className="navbar">
       <li className="navbar-item dropdown">
@@ -37,10 +38,7 @@ export const AdminNavBar = ({ currentUser }) => {
             </Link>
           </li>
           <li>
-            <button
-              className="navbar-link"
-              onClick={() => handleCreateOrder(currentUser, navigate)}
-            >
+            <button className="navbar-link" onClick={handleCreateOrder}>
               Create Order
             </button>
           </li>
