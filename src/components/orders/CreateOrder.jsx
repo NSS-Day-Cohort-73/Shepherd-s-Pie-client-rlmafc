@@ -7,6 +7,7 @@ import {
   createEmployeeOrder,
   deleteEmployeeOrder,
   getAllOrders,
+  getEmployeeOrdersByOrderId,
   updateEmployeeOrder,
   updateOrder,
 } from "../../services/orderService";
@@ -97,6 +98,16 @@ export const CreateOrder = ({ currentUser }) => {
 
       const thisOrder = await getAllOrders(orderId);
       setOrder(thisOrder);
+      setDelivery(thisOrder.tableNumber ? false : true);
+      const employeeOrdersArray = await getEmployeeOrdersByOrderId(
+        thisOrder.id
+      );
+      const thisDeliveryDriver = employeeOrdersArray.find(
+        (item) => !item.tookOrder
+      );
+      !thisDeliveryDriver
+        ? setDeliveryDriver(null)
+        : setDeliveryDriver(thisDeliveryDriver);
 
       const employeesData = await getEmployees();
       setEmployees(employeesData);
@@ -231,7 +242,11 @@ export const CreateOrder = ({ currentUser }) => {
           </legend>
           {delivery ? (
             currentUser.isAdmin ? (
-              <select onChange={handleEmployeeChange} id="employeeId">
+              <select
+                onChange={handleEmployeeChange}
+                value={deliveryDriver?.employeeId}
+                id="employeeId"
+              >
                 <option value={0}>-- Please choose an option --</option>
                 {employees.map((item) => (
                   <option key={item.id} value={item.id}>
