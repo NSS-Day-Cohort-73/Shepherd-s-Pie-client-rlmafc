@@ -28,38 +28,6 @@ export const Reports = () => {
   const [mostCommonPizzaToppings, setMostCommonPizzaToppings] = useState([]);
   const [total, setTotal] = useState(0);
 
-  useEffect(() => {
-    // Step 1: Fetch pizzaToppings array
-    const fetchAndProcessToppings = async () => {
-      const pizzaToppings = await getExpandedPizzaToppings();
-
-      // Step 2: Filter pizzaToppings to match pizzas from filteredPizzas
-      const filteredPizzaToppings = pizzaToppings.filter((topping) =>
-        filteredPizzas.some((pizza) => pizza.id === topping.pizzaId)
-      );
-
-      // Step 3: Count occurrences of each toppingId and store references to objects
-      const toppingCount = {};
-      filteredPizzaToppings.forEach((topping) => {
-        const { toppingId } = topping;
-        if (!toppingCount[toppingId]) {
-          toppingCount[toppingId] = { count: 0, toppings: [] };
-        }
-        toppingCount[toppingId].count += 1;
-        toppingCount[toppingId].toppings.push(topping);
-      });
-
-      // Step 4: Sort toppings by count in descending order and grab the top 3 topping objects
-      const sortedToppings = Object.values(toppingCount)
-        .sort((a, b) => b.count - a.count) // Sort by the count value, descending
-        .flatMap((entry) => entry.toppings); // Flatten to get all pizzaTopping objects related to the most common toppingIds
-
-      setMostCommonPizzaToppings(sortedToppings);
-    };
-
-    fetchAndProcessToppings();
-  }, [filteredPizzas]);
-
   // Fetch Orders, Employee Orders, Pizzas, Sizes, Cheeses, and Sauces
   const getAndSetOrders = async () => {
     const ordersArray = await getAllOrders();
@@ -97,18 +65,84 @@ export const Reports = () => {
         orders.some((order) => pizza.orderId === order.id)
       );
       setFilteredPizzas(filteredPizzaArray);
+    } else {
+      setFilteredPizzas([]);
     }
   }, [orders, pizzas]);
 
-  // Calculate total price whenever filteredPizzas or other related data changes
+  // Update Favorites and Total whenever filteredPizzas, orders, or ingredient lists change
   useEffect(() => {
-    if (
-      filteredPizzas.length > 0 &&
-      sizes.length > 0 &&
-      cheeses.length > 0 &&
-      sauces.length > 0 &&
-      mostCommonPizzaToppings.length > 0
-    ) {
+    if (filteredPizzas.length > 0) {
+      // Update Favorites
+      const updateFavorites = () => {
+        if (sizes.length > 0) {
+          // Calculate Favorite Size
+          let sizeCounts = {};
+          let favoriteSizeId = null;
+          let numberOfFavorites = 0;
+
+          filteredPizzas.forEach((pizza) => {
+            const sizeId = pizza.sizeId;
+            sizeCounts[sizeId] = (sizeCounts[sizeId] || 0) + 1;
+
+            if (sizeCounts[sizeId] > numberOfFavorites) {
+              numberOfFavorites = sizeCounts[sizeId];
+              favoriteSizeId = sizeId;
+            }
+          });
+
+          const newFavoriteSize = sizes.find(
+            (size) => size.id === favoriteSizeId
+          );
+          setFavoriteSize(newFavoriteSize);
+        }
+
+        if (cheeses.length > 0) {
+          // Calculate Favorite Cheese
+          let cheeseCounts = {};
+          let favoriteCheeseId = null;
+          let numberOfFavorites = 0;
+
+          filteredPizzas.forEach((pizza) => {
+            const cheeseId = pizza.cheeseId;
+            cheeseCounts[cheeseId] = (cheeseCounts[cheeseId] || 0) + 1;
+
+            if (cheeseCounts[cheeseId] > numberOfFavorites) {
+              numberOfFavorites = cheeseCounts[cheeseId];
+              favoriteCheeseId = cheeseId;
+            }
+          });
+
+          const newFavoriteCheese = cheeses.find(
+            (cheese) => cheese.id === favoriteCheeseId
+          );
+          setFavoriteCheese(newFavoriteCheese);
+        }
+
+        if (sauces.length > 0) {
+          // Calculate Favorite Sauce
+          let sauceCounts = {};
+          let favoriteSauceId = null;
+          let numberOfFavorites = 0;
+
+          filteredPizzas.forEach((pizza) => {
+            const sauceId = pizza.sauceId;
+            sauceCounts[sauceId] = (sauceCounts[sauceId] || 0) + 1;
+
+            if (sauceCounts[sauceId] > numberOfFavorites) {
+              numberOfFavorites = sauceCounts[sauceId];
+              favoriteSauceId = sauceId;
+            }
+          });
+
+          const newFavoriteSauce = sauces.find(
+            (sauce) => sauce.id === favoriteSauceId
+          );
+          setFavoriteSauce(newFavoriteSauce);
+        }
+      };
+
+      // Calculate Total
       const calculateTotal = () => {
         // Calculate size price
         const sizeTotal = filteredPizzas.reduce((acc, pizza) => {
@@ -121,12 +155,12 @@ export const Reports = () => {
           return acc + (topping.topping ? topping.topping.price : 0);
         }, 0);
 
-        //Calculate tip
+        // Calculate tip
         const tipTotal = orders.reduce((acc, order) => {
           return acc + (order.tipAmount ? order.tipAmount : 0);
         }, 0);
 
-        //Calculate Delivery Fee
+        // Calculate Delivery Fee
         let deliveryTotal = 0;
         orders.forEach((item) => {
           if (!item.tableNumber) {
@@ -138,94 +172,15 @@ export const Reports = () => {
         setTotal(sizeTotal + toppingTotal + tipTotal + deliveryTotal);
       };
 
+      updateFavorites();
       calculateTotal();
+    } else {
+      setFavoriteSize({});
+      setFavoriteCheese({});
+      setFavoriteSauce({});
+      setTotal(0);
     }
-  }, [filteredPizzas, sizes, cheeses, sauces, mostCommonPizzaToppings]);
-
-  // Determine favorite size whenever filteredPizzas or sizes change
-  useEffect(() => {
-    if (filteredPizzas.length > 0 && sizes.length > 0) {
-      let sizeCounts = {}; // To track count of each size
-      let favoriteSizeId = null;
-      let numberOfFavorites = 0;
-
-      // Count each size in filteredPizzas
-      for (let i = 0; i < filteredPizzas.length; i++) {
-        const sizeId = filteredPizzas[i].sizeId;
-        sizeCounts[sizeId] = (sizeCounts[sizeId] || 0) + 1;
-
-        // Track the most popular size
-        if (sizeCounts[sizeId] > numberOfFavorites) {
-          numberOfFavorites = sizeCounts[sizeId];
-          favoriteSizeId = sizeId;
-        }
-      }
-
-      // Find the object in sizes corresponding to the favorite sizeId
-      const newFavoriteSize = sizes.find((size) => size.id === favoriteSizeId);
-
-      // Set the favorite size using setFavoriteSize function
-      setFavoriteSize(newFavoriteSize);
-    }
-  }, [filteredPizzas, sizes]);
-
-  // Determine favorite cheese whenever filteredPizzas or cheeses change
-  useEffect(() => {
-    if (filteredPizzas.length > 0 && cheeses.length > 0) {
-      let cheeseCounts = {}; // To track count of each cheese
-      let favoriteCheeseId = null;
-      let numberOfFavorites = 0;
-
-      // Count each cheese in filteredPizzas
-      for (let i = 0; i < filteredPizzas.length; i++) {
-        const cheeseId = filteredPizzas[i].cheeseId;
-        cheeseCounts[cheeseId] = (cheeseCounts[cheeseId] || 0) + 1;
-
-        // Track the most popular cheese
-        if (cheeseCounts[cheeseId] > numberOfFavorites) {
-          numberOfFavorites = cheeseCounts[cheeseId];
-          favoriteCheeseId = cheeseId;
-        }
-      }
-
-      // Find the object in cheeses corresponding to the favorite cheeseId
-      const newFavoriteCheese = cheeses.find(
-        (cheese) => cheese.id === favoriteCheeseId
-      );
-
-      // Set the favorite cheese using setFavoriteCheese function
-      setFavoriteCheese(newFavoriteCheese);
-    }
-  }, [filteredPizzas, cheeses]);
-
-  // Determine favorite sauce whenever filteredPizzas or sauces change
-  useEffect(() => {
-    if (filteredPizzas.length > 0 && sauces.length > 0) {
-      let sauceCounts = {}; // To track count of each sauce
-      let favoriteSauceId = null;
-      let numberOfFavorites = 0;
-
-      // Count each sauce in filteredPizzas
-      for (let i = 0; i < filteredPizzas.length; i++) {
-        const sauceId = filteredPizzas[i].sauceId;
-        sauceCounts[sauceId] = (sauceCounts[sauceId] || 0) + 1;
-
-        // Track the most popular sauce
-        if (sauceCounts[sauceId] > numberOfFavorites) {
-          numberOfFavorites = sauceCounts[sauceId];
-          favoriteSauceId = sauceId;
-        }
-      }
-
-      // Find the object in sauces corresponding to the favorite sauceId
-      const newFavoriteSauce = sauces.find(
-        (sauce) => sauce.id === favoriteSauceId
-      );
-
-      // Set the favorite sauce using setFavoriteSauce function
-      setFavoriteSauce(newFavoriteSauce);
-    }
-  }, [filteredPizzas, sauces]);
+  }, [filteredPizzas, sizes, cheeses, sauces, mostCommonPizzaToppings, orders]);
 
   return (
     <article className="reports">
