@@ -7,6 +7,7 @@ import {
   createEmployeeOrder,
   deleteEmployeeOrder,
   getAllOrders,
+  getEmployeeOrdersByOrderId,
   updateEmployeeOrder,
   updateOrder,
 } from "../../services/orderService";
@@ -26,7 +27,7 @@ export const CreateOrder = ({ currentUser }) => {
   orderId = parseInt(orderId, 10);
 
   const [order, setOrder] = useState({
-    tableNumber: 0,
+    tableNumber: 1,
     date: "",
     tipAmount: 0.0,
     complete: false,
@@ -97,6 +98,16 @@ export const CreateOrder = ({ currentUser }) => {
 
       const thisOrder = await getAllOrders(orderId);
       setOrder(thisOrder);
+      setDelivery(thisOrder.tableNumber ? false : true);
+      const employeeOrdersArray = await getEmployeeOrdersByOrderId(
+        thisOrder.id
+      );
+      const thisDeliveryDriver = employeeOrdersArray.find(
+        (item) => !item.tookOrder
+      );
+      !thisDeliveryDriver
+        ? setDeliveryDriver(null)
+        : setDeliveryDriver(thisDeliveryDriver);
 
       const employeesData = await getEmployees();
       setEmployees(employeesData);
@@ -146,11 +157,13 @@ export const CreateOrder = ({ currentUser }) => {
   };
 
   const handleEmployeeChange = async (event) => {
-    setDeliveryDriver((prev) => ({
-      ...prev,
-      employeeId: parseInt(event.target.value),
-    }));
-    await updateEmployeeOrder(deliveryDriver);
+    const newEmployeeId = parseInt(event.target.value);
+    setDeliveryDriver((prev) => {
+      const updatedDriver = { ...prev, employeeId: newEmployeeId };
+      // Update the employee order after setting the new employeeId
+      updateEmployeeOrder(updatedDriver); // Pass updated driver directly
+      return updatedDriver;
+    });
   };
 
   const handleTableNumberChange = (valueOrEvent) => {
@@ -229,7 +242,11 @@ export const CreateOrder = ({ currentUser }) => {
           </legend>
           {delivery ? (
             currentUser.isAdmin ? (
-              <select onChange={handleEmployeeChange} id="employeeId">
+              <select
+                onChange={handleEmployeeChange}
+                value={deliveryDriver?.employeeId}
+                id="employeeId"
+              >
                 <option value={0}>-- Please choose an option --</option>
                 {employees.map((item) => (
                   <option key={item.id} value={item.id}>
