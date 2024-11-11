@@ -35,14 +35,13 @@ export const ViewEmployees = ({ currentUser }) => {
       <div>
         <ul className="employee-list">
           {employees.map((employee) => (
-            <li key={employee.id} className="employee-list__item">
-              <Link
-                to={`/employees/view/${employee.id}`}
-                className="employee-link"
-              >
-                {employee.fullName}
-              </Link>
-            </li>
+            <Link
+              key={employee.id}
+              to={`/employees/view/${employee.id}`}
+              className="employee-link"
+            >
+              <li className="employee-list__item"> {employee.fullName}</li>
+            </Link>
           ))}
         </ul>
       </div>
