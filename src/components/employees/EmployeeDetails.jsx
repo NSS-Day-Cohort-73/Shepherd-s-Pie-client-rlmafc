@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { deleteEmployee, getEmployees } from "../../services/employeeService"
 import "./EmployeeDetails.css"
 
-export const EmployeeDetails = () => {
+export const EmployeeDetails = ({ currentUser }) => {
   // get employeeId from the url
   const { employeeId } = useParams()
   const navigate = useNavigate()
@@ -26,8 +26,14 @@ export const EmployeeDetails = () => {
 
   // handle delete employee
   const handleDeleteEmployee = async () => {
+    if (employee.id === currentUser.id) {
+      alert(
+        "Thou darest to abandon thy family of thine own will! Thou art forbidden to ever depart!"
+      )
+      return
+    }
     try {
-      await deleteEmployee(employeeId)
+      await deleteEmployee(employee.id)
       navigate("/employees/view")
     } catch (error) {
       setError("Failed to delete employee.")
@@ -56,20 +62,20 @@ export const EmployeeDetails = () => {
           <p>Address: {employee.address}</p>
           <p>Phone: {employee.phone}</p>
         </div>
-      </div>
-      <div className="employee-details__buttons">
-        <button
-          onClick={handleEditEmployee}
-          className="employee-details__edit__btn"
-        >
-          Edit
-        </button>
-        <button
-          onClick={handleDeleteEmployee}
-          className="employee-details__delete__btn"
-        >
-          Delete
-        </button>
+        <div className="employee-details__buttons">
+          <button
+            onClick={handleEditEmployee}
+            className="employee-details__edit__btn"
+          >
+            Edit
+          </button>
+          <button
+            onClick={handleDeleteEmployee}
+            className="employee-details__delete__btn"
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   )
