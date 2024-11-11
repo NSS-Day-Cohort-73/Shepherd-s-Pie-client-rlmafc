@@ -65,7 +65,7 @@ export const OrderDetails = () => {
       const toppingTotal = await toppingCalculations();
       const sizeTotal = await getSizePrice();
       const tipAmount = parseFloat(order.tipAmount || 0);
-      const deliveryCharge = !order.tableNumber ? 0 : 5;
+      const deliveryCharge = order.tableNumber ? 0 : 5;
       setTotal(tipAmount + toppingTotal + sizeTotal + deliveryCharge);
     };
     getTotal();
