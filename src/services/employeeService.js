@@ -1,13 +1,16 @@
 // GET request to fetch all employees
-export const getEmployees = async () => {
+export const getEmployees = async (employeeId) => {
   try {
-    const response = await fetch("http://localhost:8088/employees");
-    const employees = await response.json();
-    return employees;
+    const url = employeeId
+      ? `http://localhost:8088/employees/${employeeId}`
+      : "http://localhost:8088/employees"
+    const response = await fetch(url)
+    const employees = await response.json()
+    return employees
   } catch (error) {
-    console.error("Error fetching employees:", error);
+    console.error("Error fetching employees:", error)
   }
-};
+}
 
 // POST request to add a new employee
 export const addEmployee = async (newEmployee) => {
@@ -18,18 +21,18 @@ export const addEmployee = async (newEmployee) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newEmployee),
-    });
-    return response.json();
+    })
+    return response.json()
   } catch (error) {
-    console.error("Error adding employee:", error);
+    console.error("Error adding employee:", error)
   }
-};
+}
 
 // PUT request to update an existing employee
-export const updateEmployee = async (employeeId, updatedEmployee) => {
+export const updateEmployee = async (updatedEmployee) => {
   try {
     const response = await fetch(
-      `http://localhost:8088/employees/${employeeId}`,
+      `http://localhost:8088/employees/${updatedEmployee.id}`,
       {
         method: "PUT",
         headers: {
@@ -37,21 +40,21 @@ export const updateEmployee = async (employeeId, updatedEmployee) => {
         },
         body: JSON.stringify(updatedEmployee),
       }
-    );
-    return response.json();
+    )
+    return response.json()
   } catch (error) {
-    console.error("Error updating employee:", error);
+    console.error("Error updating employee:", error)
   }
-};
+}
 
 // DELETE request to remove an employee
 export const deleteEmployee = async (employeeId) => {
   try {
     await fetch(`http://localhost:8088/employees/${employeeId}`, {
       method: "DELETE",
-    });
-    console.log(`Employee ${employeeId} deleted.`);
+    })
+    console.log(`Employee ${employeeId} deleted.`)
   } catch (error) {
-    console.error("Error deleting employee:", error);
+    console.error("Error deleting employee:", error)
   }
-};
+}

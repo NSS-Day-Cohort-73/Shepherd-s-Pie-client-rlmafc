@@ -1,0 +1,76 @@
+li {
+  list-style-type: none;
+}
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: inherit; /* Inherit text color */
+  font: inherit; /* Inherit font styling */
+  cursor: pointer; /* Shows pointer cursor on hover */
+}
+
+.navbar {
+  display: flex;
+  flex-wrap: nowrap;
+  background-color: var(--darkest);
+  margin: 0;
+  width: 100%;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.navbar-item {
+  flex-grow: 1;
+  list-style-type: none;
+  text-align: center;
+  color: var(--lightest);
+  position: relative; /* Added for dropdown positioning */
+}
+
+.navbar-link:hover {
+  cursor: pointer;
+}
+
+.navbar-link {
+  text-decoration: none;
+  font-family: "Quicksand", sans-serif;
+  letter-spacing: 1px;
+  color: var(--lightest);
+}
+
+.navbar-logout {
+  margin-left: auto;
+}
+
+/* Dropdown styling */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%; /* Positions directly below the button */
+  left: 50%; /* Positions dropdown from the center of the button */
+  transform: translateX(-50%); /* Centers dropdown */
+  background-color: var(--darkest);
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 150px;
+}
+
+.dropdown-content li {
+  padding: 10px;
+  text-align: left;
+}
+
+.dropdown-content li:hover {
+  background-color: var(--accent);
+  font-weight: bold;
+}
+
+/* Show dropdown on hover */
+.navbar-item.dropdown:hover .dropdown-content {
+  display: block;
+}
